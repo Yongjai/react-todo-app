@@ -37,43 +37,54 @@ class TodoInfo extends Component {
         });
     }
 
+
     render() {
         const { todo, dueDate } = this.props.info;
-        const { editing } = this.state;
+        const { editing } = this.state;    
+        
+        const trueBlock = (
+            <div>
+                <div>
+                    <input 
+                     name="todo"
+                     onChange={this.handleChange}
+                     value={this.state.todo}
+                    />
+                </div>
+                <div>
+                    <input 
+                     name="dueDate"
+                     onChange={this.handleChange}
+                     value={this.state.dueDate}
+                    />
+                </div>      
+            </div>
+        )
 
-        const style = {
+        const falseBlock = (
+            <div>
+                <div>
+                    <b>{todo}</b>
+                </div>
+                <div>{dueDate}</div>
+             </div>
+        )
+
+        const plainStyle = {
             border: '1px solid black',
             padding: '8px',
             margin: '8px',
         }
 
+        const editingStyle = {
+            border: '2px solid red',
+            padding: '8px',
+            margin: '8px',
+        }
+
         return (
-           <div style={style}>
-           { editing ? (
-               <div>
-                   <div>
-                       <input 
-                        name="todo"
-                        onChange={this.handleChange}
-                        value={this.state.todo}
-                       />
-                   </div>
-                   <div>
-                       <input 
-                        name="dueDate"
-                        onChange={this.handleChange}
-                        value={this.state.dueDate}
-                       />
-                   </div>      
-               </div>
-           ) : (
-               <div>
-                   <div>
-                       <b>{todo}</b>
-                   </div>
-                   <div>{dueDate}</div>
-               </div>      
-           )}
+           <div style={ editing ? editingStyle : plainStyle }>
+           { editing ? trueBlock : falseBlock }
            <button onClick={this.handleRemove}>삭제</button>
            <button onClick={this.handleUpdate}>{editing ? "적용" : "수정"}</button>
            </div>

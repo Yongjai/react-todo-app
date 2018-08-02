@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import TodoForm from './components/TodoForm';
 import TodoInfoList from './components/TodoInfoList';
 
@@ -21,13 +21,17 @@ class App extends Component {
       기존의 객체나 배열을 기반으로 새로운 객체나 배열을 만들어 값을 주입해줘야 합니다.  
       추가적으로 setState를 사용하는 이유는 값이 바뀌면 re-rendering을 무조건 하기 위함이다.
     */
-      this.setState({
+      // this.setState({
         // 기존에 있던 배열을 수정하지 않고 새로운 배열을 만들어 data를 넣어주고 이 배열을 기존의 배열 자리에 넣어준다.
         // Object.assign을 이용해서 빈 객체{}를 만들고 그 빈 객체에 data 값과 id를 넣어준다.
-        information: this.state.information.concat(Object.assign({}, data, {
-          id: this.id++
-        }))
-      });
+        // information: this.state.information.concat(Object.assign({}, data, {
+        //   id: this.id++
+        // }))
+      // });
+      const { information: info } = this.state;     
+      const information = info.concat({...data, id: this.id++ });
+     
+      this.setState({ information });
     }
     
     handleRemove = (id) => {
@@ -41,29 +45,21 @@ class App extends Component {
       const { information } = this.state;
       this.setState({
         information: information.map(
-          info => {
-            if (info.id === id) {
-              return {
-                id,
-                ...data,
-              };
-            }
-            return info;
-          }
+          info => (info.id === id ? { id, ...data } : info)
         )
-      })
+      });
     }
    
     render() {
       return (    
-      <div> 
+      <Fragment> 
        <TodoForm onCreate={this.handleCreate} />
        <TodoInfoList 
         data={this.state.information}
         onRemove={this.handleRemove}
         onUpdate={this.handleUpdate}
         />
-      </div>
+      </Fragment>
       );  
     }
 }
